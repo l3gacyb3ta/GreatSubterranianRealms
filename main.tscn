@@ -1,0 +1,458 @@
+[gd_scene load_steps=28 format=3 uid="uid://g82v5j5sc7s8"]
+
+[ext_resource type="Script" path="res://scripts/pausing.gd" id="1_5v3jn"]
+[ext_resource type="PackedScene" uid="uid://cpkpdpdmcjns2" path="res://character.tscn" id="1_ruilu"]
+[ext_resource type="PackedScene" uid="uid://y1dnoiyifa2j" path="res://ui/pause_menu.tscn" id="2_y1k6u"]
+[ext_resource type="Script" path="res://scripts/fps_counter.gd" id="3_grwkf"]
+[ext_resource type="PackedScene" uid="uid://c1etewb0ct0y6" path="res://zork_scenes/house.tscn" id="5_qhbxe"]
+[ext_resource type="Script" path="res://scripts/popup.gd" id="6_5ww2j"]
+[ext_resource type="Texture2D" uid="uid://csgpyn47xyty8" path="res://assets/icons/down_arrow.svg" id="6_54clb"]
+[ext_resource type="Script" path="res://scripts/game_world.gd" id="7_bpo6w"]
+[ext_resource type="FontFile" uid="uid://hensckae53lm" path="res://assets/fonts/EBGaramond08-Regular.ttf" id="7_f50j8"]
+[ext_resource type="Script" path="res://scripts/reticle.gd" id="8_yu1li"]
+[ext_resource type="PackedScene" uid="uid://covw8gfs4ply3" path="res://zork_scenes/forrest.tscn" id="9_528qs"]
+[ext_resource type="Shader" path="res://shaders/mountains.gdshader" id="12_61gba"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eouub"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="Theme" id="Theme_ur8k3"]
+Label/styles/normal = SubResource("StyleBoxFlat_eouub")
+
+[sub_resource type="LabelSettings" id="LabelSettings_ekqt7"]
+font = ExtResource("7_f50j8")
+font_size = 30
+
+[sub_resource type="Gradient" id="Gradient_2h5r3"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ivaqq"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_0tr6i"]
+width = 32
+height = 32
+color_ramp = SubResource("Gradient_2h5r3")
+noise = SubResource("FastNoiseLite_ivaqq")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xoifs"]
+sky_top_color = Color(0.192157, 0.278431, 0.462745, 1)
+sky_horizon_color = Color(0.933333, 0.682353, 0.427451, 1)
+ground_bottom_color = Color(0.0239067, 0.0175898, 0.172918, 1)
+ground_horizon_color = Color(0.984314, 0.517647, 0.682353, 1)
+ground_curve = 0.0156916
+sun_angle_max = 0.0
+
+[sub_resource type="Sky" id="Sky_cicak"]
+sky_material = SubResource("ProceduralSkyMaterial_xoifs")
+
+[sub_resource type="Environment" id="Environment_r6d1i"]
+background_mode = 2
+sky = SubResource("Sky_cicak")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 3
+glow_bloom = 0.5
+glow_map = SubResource("NoiseTexture2D_0tr6i")
+volumetric_fog_enabled = true
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5t6t6"]
+size = Vector3(150, 5, 1)
+
+[sub_resource type="Gradient" id="Gradient_u74vg"]
+offsets = PackedFloat32Array(0, 0.3, 0.780645)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6k73m"]
+noise_type = 2
+frequency = 0.0243
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_uttrr"]
+width = 4096
+height = 4096
+color_ramp = SubResource("Gradient_u74vg")
+noise = SubResource("FastNoiseLite_6k73m")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ei4m"]
+render_priority = 0
+shader = ExtResource("12_61gba")
+shader_parameter/height_scale = 30.0
+shader_parameter/displacement = SubResource("NoiseTexture2D_uttrr")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5jr87"]
+material = SubResource("ShaderMaterial_1ei4m")
+size = Vector2(500, 100)
+subdivide_width = 70
+subdivide_depth = 64
+
+[node name="Game" type="Node" node_paths=PackedStringArray("root", "PauseMenu")]
+process_mode = 3
+script = ExtResource("1_5v3jn")
+root = NodePath(".")
+PauseMenu = NodePath("PauseMenu")
+
+[node name="Reticle" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_yu1li")
+
+[node name="CenterContainer" type="CenterContainer" parent="Reticle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Reticle/CenterContainer"]
+custom_minimum_size = Vector2(3, 3)
+layout_mode = 2
+mouse_filter = 2
+color = Color(1, 1, 1, 0.335)
+
+[node name="FPS Counter" type="Label" parent="Reticle"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("3_grwkf")
+
+[node name="PauseMenu" parent="." node_paths=PackedStringArray("character", "worldEnvironment") instance=ExtResource("2_y1k6u")]
+process_mode = 3
+visible = false
+character = NodePath("../Game World/Character")
+worldEnvironment = NodePath("../Game World/WorldEnvironment")
+
+[node name="Popup" type="Control" parent="."]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_5ww2j")
+
+[node name="ColorRect" type="ColorRect" parent="Popup"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+color = Color(0.270222, 0.270222, 0.270222, 0.562)
+
+[node name="MoreIcon" type="TextureRect" parent="Popup"]
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -15.0
+offset_right = 208.0
+offset_bottom = 72.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.07, 0.13)
+texture = ExtResource("6_54clb")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Popup"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="Popup/VBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+size_flags_vertical = 3
+theme = SubResource("Theme_ur8k3")
+text = "You shouldn't be seeing this"
+label_settings = SubResource("LabelSettings_ekqt7")
+autowrap_mode = 2
+text_overrun_behavior = 2
+ellipsis_char = ""
+
+[node name="Game World" type="Node3D" parent="."]
+script = ExtResource("7_bpo6w")
+
+[node name="ResetPoint" type="Node3D" parent="Game World"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.66067, 0.22847, 5.80679)
+
+[node name="Character" parent="Game World" node_paths=PackedStringArray("popup_controller", "reset_point") instance=ExtResource("1_ruilu")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.71517, 0.132622, 11.4185)
+mouse_acceleration = 0.002
+interaction_distance = 3
+popup_controller = NodePath("../../Popup")
+reset_point = NodePath("../ResetPoint")
+
+[node name="Sun" type="DirectionalLight3D" parent="Game World"]
+transform = Transform3D(0.93928, -0.243968, 0.241316, 0.138078, 0.912496, 0.385079, -0.314147, -0.328377, 0.890775, 0, 15.3143, 0)
+light_color = Color(0.933333, 0.682353, 0.427451, 1)
+light_energy = 1.2
+light_volumetric_fog_energy = 0.5
+light_bake_mode = 1
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Game World"]
+environment = SubResource("Environment_r6d1i")
+
+[node name="House" parent="Game World" instance=ExtResource("5_qhbxe")]
+
+[node name="Forrests" type="Node3D" parent="Game World"]
+
+[node name="Forrest4" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 30)
+metadata/Count = 30
+
+[node name="Forrest3" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 30)
+metadata/Count = 30
+
+[node name="Forrest2" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 0)
+metadata/Count = 30
+
+[node name="Forrest" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 0)
+metadata/Count = 30
+
+[node name="Forrest5" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 30)
+metadata/Count = 30
+
+[node name="Forrest6" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -30)
+metadata/Count = 30
+
+[node name="Forrest7" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+metadata/Count = 30
+
+[node name="Forrest8" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -30)
+metadata/Count = 30
+
+[node name="Forrest9" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -60)
+metadata/Count = 30
+
+[node name="Forrest12" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, 0)
+metadata/Count = 30
+
+[node name="Forrest13" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, 30)
+metadata/Count = 30
+
+[node name="Forrest14" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -30)
+metadata/Count = 30
+
+[node name="Forrest15" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -60)
+metadata/Count = 30
+
+[node name="Forrest16" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, 0)
+metadata/Count = 30
+
+[node name="Forrest17" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, 30)
+metadata/Count = 30
+
+[node name="Forrest18" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, -30)
+metadata/Count = 30
+
+[node name="Forrest20" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 60)
+metadata/Count = 30
+
+[node name="Forrest21" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 60)
+metadata/Count = 30
+
+[node name="Forrest22" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 60)
+metadata/Count = 30
+
+[node name="Forrest23" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, 60)
+metadata/Count = 30
+
+[node name="Forrest24" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, 60)
+metadata/Count = 30
+
+[node name="Forrest25" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, 90)
+metadata/Count = 30
+
+[node name="Forrest26" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 90)
+metadata/Count = 30
+
+[node name="Forrest27" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, 90)
+metadata/Count = 30
+
+[node name="Forrest28" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, 90)
+metadata/Count = 30
+
+[node name="Forrest36" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 0, 0)
+metadata/Count = 30
+
+[node name="Forrest37" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 0, 30)
+metadata/Count = 30
+
+[node name="Forrest38" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 0, -30)
+metadata/Count = 30
+
+[node name="Forrest39" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 0, -60)
+metadata/Count = 30
+
+[node name="Forrest40" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 0, 60)
+metadata/Count = 30
+
+[node name="Forrest41" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 0, 90)
+metadata/Count = 30
+
+[node name="Forrest29" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, 90)
+metadata/Count = 30
+
+[node name="Forrest19" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, -60)
+metadata/Count = 30
+
+[node name="Forrest30" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 0, 0)
+metadata/Count = 30
+
+[node name="Forrest31" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 0, 30)
+metadata/Count = 30
+
+[node name="Forrest32" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 0, -30)
+metadata/Count = 30
+
+[node name="Forrest33" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 0, 60)
+metadata/Count = 30
+
+[node name="Forrest34" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 0, 90)
+metadata/Count = 30
+
+[node name="Forrest35" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 0, -60)
+metadata/Count = 30
+
+[node name="Forrest10" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -60)
+metadata/Count = 30
+
+[node name="Forrest11" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -60)
+metadata/Count = 30
+
+[node name="Forrest42" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -90)
+metadata/Count = 30
+
+[node name="Forrest43" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, -90)
+metadata/Count = 30
+
+[node name="Forrest44" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 0, -90)
+metadata/Count = 30
+
+[node name="Forrest45" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -60, 0, -90)
+metadata/Count = 30
+
+[node name="Forrest46" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -90, 0, -90)
+metadata/Count = 30
+
+[node name="Forrest47" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -90)
+metadata/Count = 30
+
+[node name="Forrest48" parent="Game World/Forrests" instance=ExtResource("9_528qs")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30, 0, -90)
+metadata/Count = 30
+
+[node name="TopdownCam" type="Camera3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 33.7821, 0)
+visible = false
+cull_mask = 1040381
+projection = 1
+size = 45.335
+
+[node name="Walls" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -60.202)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls"]
+shape = SubResource("BoxShape3D_5t6t6")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 121.487)
+shape = SubResource("BoxShape3D_5t6t6")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="Walls"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 60.7433, 0, 60.7433)
+shape = SubResource("BoxShape3D_5t6t6")
+
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="Walls"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -60.7433, 0, 60.7433)
+shape = SubResource("BoxShape3D_5t6t6")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.911001, 0.412405, 0, -0.412405, 0.911001, 6.04569, 9.18593, 274.608)
+mesh = SubResource("PlaneMesh_5jr87")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 3.60536e-08, -7.96422e-08, 0, 0.911001, 0.412405, 8.74228e-08, 0.412405, -0.911001, 6.04569, 9.18593, -231.91)
+mesh = SubResource("PlaneMesh_5jr87")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0.412405, -0.911001, 0, 0.911001, 0.412405, 1, 1.80268e-08, -3.98211e-08, -247.214, 9.18593, 21.349)
+mesh = SubResource("PlaneMesh_5jr87")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -0.412405, 0.911001, 0, 0.911001, 0.412405, -1, 1.80268e-08, -3.98211e-08, 259.305, 9.18593, 21.3491)
+mesh = SubResource("PlaneMesh_5jr87")
+
+[connection signal="interact" from="Game World/Character" to="Popup" method="_on_character_interact"]

@@ -1,0 +1,4 @@
+[gd_scene format=3 uid="uid://csjgnyvfs2eqf"]
+
+[node name="Map" type="Window"]
+size = Vector2i(500, 500)

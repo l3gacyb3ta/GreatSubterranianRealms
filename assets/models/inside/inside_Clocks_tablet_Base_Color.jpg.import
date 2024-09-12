@@ -1,0 +1,39 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://vgskpfbwflpm"
+path.s3tc="res://.godot/imported/inside_Clocks_tablet_Base_Color.jpg-39dadfb1db1e0bc4bc8847604f6de64f.s3tc.ctex"
+path.etc2="res://.godot/imported/inside_Clocks_tablet_Base_Color.jpg-39dadfb1db1e0bc4bc8847604f6de64f.etc2.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "5b16ab5be201b641565bc7837cd59e4a"
+}
+
+[deps]
+
+source_file="res://assets/models/inside/inside_Clocks_tablet_Base_Color.jpg"
+dest_files=["res://.godot/imported/inside_Clocks_tablet_Base_Color.jpg-39dadfb1db1e0bc4bc8847604f6de64f.s3tc.ctex", "res://.godot/imported/inside_Clocks_tablet_Base_Color.jpg-39dadfb1db1e0bc4bc8847604f6de64f.etc2.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0

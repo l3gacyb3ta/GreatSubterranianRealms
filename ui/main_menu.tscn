@@ -1,0 +1,150 @@
+[gd_scene load_steps=12 format=3 uid="uid://cc8l4cyepx4rh"]
+
+[ext_resource type="Script" path="res://ui/scripts/main_menu.gd" id="2_kcoq8"]
+[ext_resource type="Texture2D" uid="uid://c3wn1byik4n6f" path="res://assets/icons/game.png" id="2_nwlg0"]
+[ext_resource type="Theme" uid="uid://csk2y37ep6yn7" path="res://assets/theme/button.tres" id="2_vbf4i"]
+[ext_resource type="FontFile" uid="uid://hensckae53lm" path="res://assets/fonts/EBGaramond08-Regular.ttf" id="3_5jm87"]
+[ext_resource type="Script" path="res://ui/scripts/play.gd" id="3_v0ffb"]
+[ext_resource type="FontFile" uid="uid://230w8v46dk4y" path="res://assets/fonts/WorkSans-SemiBold.otf" id="6_7cofi"]
+[ext_resource type="Script" path="res://ui/scripts/version.gd" id="7_4uvsr"]
+[ext_resource type="Texture2D" uid="uid://bb5d2bjyqk83p" path="res://assets/icons/post-it-note.png" id="8_b8a5c"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_2w7aq"]
+font = ExtResource("3_5jm87")
+font_size = 90
+
+[sub_resource type="Theme" id="Theme_4ynxs"]
+default_font = ExtResource("6_7cofi")
+
+[sub_resource type="LabelSettings" id="LabelSettings_0j3dv"]
+font_color = Color(0, 0, 0, 1)
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_kcoq8")
+
+[node name="ColorRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_nwlg0")
+
+[node name="Loading" type="VBoxContainer" parent="."]
+visible = false
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+offset_left = 40.0
+offset_top = 564.0
+offset_right = 194.0
+offset_bottom = 610.0
+grow_vertical = 0
+theme = ExtResource("2_vbf4i")
+
+[node name="Indicator" type="Button" parent="Loading"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Loading..."
+alignment = 0
+
+[node name="Buttons" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -145.0
+offset_right = 170.0
+offset_bottom = -44.0
+grow_vertical = 0
+theme = ExtResource("2_vbf4i")
+
+[node name="Play" type="Button" parent="Buttons"]
+layout_mode = 2
+text = "Start"
+alignment = 0
+script = ExtResource("3_v0ffb")
+
+[node name="Settings" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Options"
+alignment = 0
+
+[node name="Quit" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quit"
+alignment = 0
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="CenterContainer"]
+layout_mode = 2
+text = "Great Subterranean Realm"
+label_settings = SubResource("LabelSettings_2w7aq")
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_top = -29.0
+offset_right = -6.0
+offset_bottom = -6.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = SubResource("Theme_4ynxs")
+text = "CC-BY-NC-SA Arcade Wise 2024 v0.6"
+horizontal_alignment = 2
+script = ExtResource("7_4uvsr")
+
+[node name="Post-it" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -207.0
+offset_top = 4.0
+offset_right = -1.0
+offset_bottom = 215.0
+grow_horizontal = 0
+rotation = 0.261799
+texture = ExtResource("8_b8a5c")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="Post-it"]
+layout_mode = 0
+offset_left = 37.4866
+offset_top = 51.0368
+offset_right = 185.487
+offset_bottom = 178.037
+rotation = -0.0926819
+text = "Sorry, you can't go in the house, but feel free to look in!
+(Or try, and reset your position)"
+label_settings = SubResource("LabelSettings_0j3dv")
+autowrap_mode = 2
+
+[connection signal="pressed" from="Buttons/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Buttons/Settings" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="Buttons/Quit" to="." method="_on_quit_pressed"]

@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=3 uid="uid://covw8gfs4ply3"]
+
+[ext_resource type="Material" uid="uid://qxx7liicgbk0" path="res://assets/materials/grass.tres" id="1_7dav1"]
+[ext_resource type="PackedScene" uid="uid://cmtj4nparv2wm" path="res://assets/models/tree.tscn" id="2_jgqat"]
+[ext_resource type="Script" path="res://scripts/random_distribution.gd" id="3_2dwsh"]
+[ext_resource type="Texture2D" uid="uid://dd75w0dm1kv7p" path="res://assets/textures/forrest_icon.png" id="4_y8ye4"]
+[ext_resource type="Script" path="res://scripts/delete_me_on_load.gd" id="5_hqxhx"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_d80tt"]
+material = ExtResource("1_7dav1")
+size = Vector3(30, 1, 30)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qs5xw"]
+size = Vector3(30, 1, 30)
+
+[node name="Forrest" type="Node3D"]
+metadata/Count = 0
+
+[node name="Ground" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.551, 0)
+
+[node name="HouseGround" type="MeshInstance3D" parent="Ground"]
+layers = 8193
+material_override = ExtResource("1_7dav1")
+mesh = SubResource("BoxMesh_d80tt")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("BoxShape3D_qs5xw")
+
+[node name="Tree" parent="." instance=ExtResource("2_jgqat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 11)
+visible = false
+
+[node name="Random Distribution" type="Node3D" parent="." node_paths=PackedStringArray("object")]
+script = ExtResource("3_2dwsh")
+object = NodePath("../Tree")
+
+[node name="Icon" type="Decal" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0151138, 0.712685, 0.0302124)
+size = Vector3(21.3176, 2, 18.0426)
+texture_albedo = ExtResource("4_y8ye4")
+script = ExtResource("5_hqxhx")

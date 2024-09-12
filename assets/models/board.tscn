@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://dt4s4wgtnlhbg"]
+
+[ext_resource type="Script" path="res://assets/models/board.gd" id="1_7sgtp"]
+[ext_resource type="Script" path="res://addons/story_colliders/storyCollider.gd" id="2_k5ors"]
+[ext_resource type="Material" uid="uid://d3e4fox6mpoq0" path="res://assets/materials/wood.tres" id="3_1x21c"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_skaqk"]
+material = ExtResource("3_1x21c")
+size = Vector3(2, 0.1, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3xbgf"]
+size = Vector3(2, 0.1, 0.5)
+
+[node name="Board" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.95628)
+script = ExtResource("1_7sgtp")
+collider = false
+
+[node name="Story" type="StaticBody3D" parent="."]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("2_k5ors")
+description = "The board can't be budged."
+
+[node name="Mesh" type="MeshInstance3D" parent="Story"]
+mesh = SubResource("BoxMesh_skaqk")
+
+[node name="Collider" type="CollisionShape3D" parent="Story"]
+shape = SubResource("BoxShape3D_3xbgf")
+
+[node name="StaticCollider" type="StaticBody3D" parent="."]
+
+[node name="Collider" type="CollisionShape3D" parent="StaticCollider"]
+shape = SubResource("BoxShape3D_3xbgf")

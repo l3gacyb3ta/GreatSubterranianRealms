@@ -1,0 +1,124 @@
+[gd_scene load_steps=6 format=3 uid="uid://y1dnoiyifa2j"]
+
+[ext_resource type="Shader" path="res://shaders/pause.gdshader" id="1_qbowb"]
+[ext_resource type="Script" path="res://scripts/pause_menu_passthrough.gd" id="1_ypfu5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_p67r2"]
+font_size = 45
+shadow_size = 7
+shadow_color = Color(0, 0, 0, 0.221)
+shadow_offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pmkiq"]
+shader = ExtResource("1_qbowb")
+shader_parameter/quantize_size = 1.0
+shader_parameter/handle_scale = null
+shader_parameter/handle_subpixels = true
+shader_parameter/dither_enabled = true
+shader_parameter/bayer_pattern = 2.0
+shader_parameter/divisions = 2.0
+shader_parameter/contrast = 0.677
+shader_parameter/shift = 0.0
+shader_parameter/grayscale = true
+shader_parameter/use_palette = null
+
+[sub_resource type="GDScript" id="GDScript_bbboh"]
+script/source = "extends ColorRect
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta: float) -> void:
+	self.process_mode = Node.PROCESS_MODE_DISABLED
+"
+
+[node name="PauseMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ypfu5")
+
+[node name="Above Blur" type="Control" parent="." node_paths=PackedStringArray("shortcut_context")]
+z_index = 1
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+shortcut_context = NodePath("..")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Above Blur"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -191.5
+offset_top = -77.5
+offset_right = 191.5
+offset_bottom = 77.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Above Blur/VBoxContainer"]
+layout_mode = 2
+text = "         Paused
+Escape to resume"
+label_settings = SubResource("LabelSettings_p67r2")
+
+[node name="Reset" type="Button" parent="Above Blur/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reset Position"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Above Blur/VBoxContainer"]
+layout_mode = 2
+
+[node name="Save" type="Button" parent="Above Blur/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save"
+
+[node name="Reset Save" type="Button" parent="Above Blur/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Reset Save"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Above Blur/VBoxContainer"]
+layout_mode = 2
+
+[node name="Quit" type="Button" parent="Above Blur/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quit"
+
+[node name="MainMenu" type="Button" parent="Above Blur/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Menu"
+
+[node name="Options" type="Button" parent="Above Blur/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Options"
+
+[node name="Blur" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_pmkiq")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = SubResource("GDScript_bbboh")
+
+[connection signal="property_list_changed" from="." to="." method="_on_property_list_changed"]
+[connection signal="pressed" from="Above Blur/VBoxContainer/Reset" to="." method="_on_reset_pressed"]
+[connection signal="pressed" from="Above Blur/VBoxContainer/HBoxContainer2/Save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="Above Blur/VBoxContainer/HBoxContainer2/Reset Save" to="." method="_on_reset_save_pressed"]
+[connection signal="pressed" from="Above Blur/VBoxContainer/HBoxContainer/Quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Above Blur/VBoxContainer/HBoxContainer/MainMenu" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="Above Blur/VBoxContainer/HBoxContainer/Options" to="." method="_on_options_pressed"]

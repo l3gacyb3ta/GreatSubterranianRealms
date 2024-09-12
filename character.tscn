@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://cpkpdpdmcjns2"]
+
+[ext_resource type="Script" path="res://scripts/camera.gd" id="2_lxccn"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tf7px"]
+height = 1.83459
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_recj8"]
+vertex_color_use_as_albedo = true
+emission_enabled = true
+emission = Color(0, 0.596078, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_8qlbr"]
+material = SubResource("StandardMaterial3D_recj8")
+height = 1.8
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_eltxm"]
+dof_blur_far_enabled = true
+dof_blur_far_distance = 70.0
+dof_blur_amount = 0.01
+auto_exposure_min_sensitivity = 20.0
+auto_exposure_max_sensitivity = 1000.0
+
+[sub_resource type="Compositor" id="Compositor_d2d2k"]
+
+[node name="Character" type="CharacterBody3D"]
+script = ExtResource("2_lxccn")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.925576, 0)
+shape = SubResource("CapsuleShape3D_tf7px")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.943401, 0)
+sorting_offset = 9000.0
+mesh = SubResource("CapsuleMesh_8qlbr")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+attributes = SubResource("CameraAttributesPractical_eltxm")
+compositor = SubResource("Compositor_d2d2k")

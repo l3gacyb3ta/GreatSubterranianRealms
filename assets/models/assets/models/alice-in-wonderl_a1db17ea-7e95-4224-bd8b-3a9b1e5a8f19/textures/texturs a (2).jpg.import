@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://dlg2t01els47u"
+path="res://.godot/imported/texturs a (2).jpg-d52bc89e13710dc4bc5c16fb1c72de35.ctex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://assets/models/assets/models/alice-in-wonderl_a1db17ea-7e95-4224-bd8b-3a9b1e5a8f19/textures/texturs a (2).jpg"
+dest_files=["res://.godot/imported/texturs a (2).jpg-d52bc89e13710dc4bc5c16fb1c72de35.ctex"]
+
+[params]
+
+compress/mode=0
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=0
+compress/channel_pack=0
+mipmaps/generate=false
+mipmaps/limit=-1
+roughness/mode=0
+roughness/src_normal=""
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=1

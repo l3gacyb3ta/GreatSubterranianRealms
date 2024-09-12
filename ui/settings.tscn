@@ -1,0 +1,153 @@
+[gd_scene load_steps=10 format=3 uid="uid://c21mjkx1f6tdu"]
+
+[ext_resource type="Script" path="res://ui/scripts/settings.gd" id="1_06uhj"]
+[ext_resource type="Texture2D" uid="uid://c3x28ggu8e6ia" path="res://assets/icons/house.png" id="1_a74fj"]
+[ext_resource type="FontFile" uid="uid://hensckae53lm" path="res://assets/fonts/EBGaramond08-Regular.ttf" id="2_0mmcg"]
+[ext_resource type="FontFile" uid="uid://230w8v46dk4y" path="res://assets/fonts/WorkSans-SemiBold.otf" id="4_fmxjf"]
+[ext_resource type="Script" path="res://ui/tab_bar.gd" id="5_dk6il"]
+[ext_resource type="Script" path="res://ui/scripts/fog_toggle.gd" id="6_78psx"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_bk0u3"]
+font = ExtResource("2_0mmcg")
+font_size = 90
+
+[sub_resource type="LabelSettings" id="LabelSettings_suvsg"]
+font_size = 18
+
+[sub_resource type="GDScript" id="GDScript_a7jbo"]
+script/source = "extends HSlider
+
+func _on_value_changed(v: float) -> void:
+	Settings.mouse_sensitivity = v / 1000
+"
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_06uhj")
+
+[node name="ColorRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_a74fj")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 91.0
+grow_horizontal = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="CenterContainer"]
+layout_mode = 2
+text = "Options"
+label_settings = SubResource("LabelSettings_bk0u3")
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -65.0
+offset_top = -49.0
+offset_right = -20.0
+offset_bottom = -18.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+text = "Back"
+
+[node name="TabBar" type="TabBar" parent="."]
+layout_mode = 2
+offset_left = 15.0
+offset_top = 107.0
+offset_right = 468.0
+offset_bottom = 633.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("4_fmxjf")
+script = ExtResource("5_dk6il")
+
+[node name="TabContainer" type="TabContainer" parent="TabBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+tab_alignment = 1
+current_tab = 1
+
+[node name="Gameplay" type="MarginContainer" parent="TabBar/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabBar/TabContainer/Gameplay"]
+layout_mode = 2
+
+[node name="MouseSensitivitySettings" type="HBoxContainer" parent="TabBar/TabContainer/Gameplay/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="TabBar/TabContainer/Gameplay/VBoxContainer/MouseSensitivitySettings"]
+layout_mode = 2
+text = "Look Sensitivity"
+label_settings = SubResource("LabelSettings_suvsg")
+
+[node name="MouseSensitivitySlider" type="HSlider" parent="TabBar/TabContainer/Gameplay/VBoxContainer/MouseSensitivitySettings"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 1.0
+max_value = 5.0
+step = 0.1
+value = 2.0
+script = SubResource("GDScript_a7jbo")
+
+[node name="Graphics" type="MarginContainer" parent="TabBar/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabBar/TabContainer/Graphics"]
+layout_mode = 2
+
+[node name="FogSettings" type="HBoxContainer" parent="TabBar/TabContainer/Graphics/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="TabBar/TabContainer/Graphics/VBoxContainer/FogSettings"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Enable Fog"
+label_settings = SubResource("LabelSettings_suvsg")
+
+[node name="FogToggle" type="CheckButton" parent="TabBar/TabContainer/Graphics/VBoxContainer/FogSettings"]
+layout_mode = 2
+button_pressed = true
+script = ExtResource("6_78psx")
+
+[connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
+[connection signal="toggled" from="TabBar/TabContainer/Graphics/VBoxContainer/FogSettings/FogToggle" to="TabBar/TabContainer/Graphics/VBoxContainer/FogSettings/FogToggle" method="_on_toggled"]
